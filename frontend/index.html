@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DataVault — transform CSV files into instant, actionable insights.">
+  <title>DataVault | Data intelligence, simplified</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ["Inter", "sans-serif"] },
+          colors: { ink: "#17152f", lavender: "#a78bfa" }
+        }
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+  <div class="page-shell">
+    <header class="site-header glass-panel">
+      <a class="brand" href="#" aria-label="DataVault home">
+        <span class="brand-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 3 4.5 7.2v9.6L12 21l7.5-4.2V7.2L12 3Z" stroke="currentColor" stroke-width="1.8"/><path d="m8 9.2 4 2.3 4-2.3M12 11.5V17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </span>
+        <span>Data<span class="brand-highlight">Vault</span></span>
+      </a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a class="nav-link active" href="#workspace">Workspace</a>
+        <a class="nav-link" href="#history">History</a>
+        <a class="nav-link" href="#preview">Preview</a>
+      </nav>
+      <button class="login-button" type="button"><span class="login-spark">✦</span> Log in <span class="login-arrow">↗</span></button>
+    </header>
+
+    <main id="workspace">
+      <section class="hero-section fade-in">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-dot"></span> DATA INTELLIGENCE, SIMPLIFIED</div>
+          <h1>Understand your data<br><span>at a glance.</span></h1>
+          <p>Turn raw CSV files into beautiful, actionable insights — in seconds, not hours.</p>
+        </div>
+        <div class="hero-orb" aria-hidden="true">
+          <div class="orb-ring ring-large"></div><div class="orb-ring ring-small"></div>
+          <div class="orb-core"><span>✦</span></div>
+        </div>
+      </section>
+
+      <section class="upload-card glass-panel fade-in delay-one" id="upload-card">
+        <div class="drop-overlay" id="drop-overlay"><span>✦</span> Drop to analyze</div>
+        <div class="upload-content">
+          <div class="upload-icon">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 14v4.2A1.8 1.8 0 0 0 6.8 20h10.4a1.8 1.8 0 0 0 1.8-1.8V14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <h2>Drop your CSV here</h2>
+            <p>or choose a file from your computer</p>
+            <small>CSV files only · Up to 50 MB</small>
+          </div>
+        </div>
+        <input id="file-input" type="file" accept=".csv,text/csv" hidden>
+        <button class="browse-button" id="browse-button" type="button">Choose file <span>→</span></button>
+      </section>
+      <p class="selected-file" id="selected-file" aria-live="polite"></p>
+      <div class="status-message" id="status-message" role="status" aria-live="polite"></div>
+
+      <section class="dashboard-grid" aria-label="Analysis dashboard">
+        <article class="dashboard-card stats-card fade-in delay-two">
+          <div class="card-heading"><div><span class="section-kicker">OVERVIEW</span><h2 id="dataset-name">No dataset yet</h2></div><span class="live-pill"><i></i> LIVE</span></div>
+          <div class="stats-grid">
+            <div class="stat-card"><span class="stat-icon rows-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5h16M4 12h16M4 18.5h16M7 3v5M12 9.5v5M17 16v5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span><span class="stat-label">Total rows</span><strong id="row-count">—</strong><span class="stat-hint">Records found</span></div>
+            <div class="stat-card"><span class="stat-icon columns-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="6" height="16" rx="1.5" stroke="currentColor" stroke-width="1.7"/><rect x="14" y="4" width="6" height="16" rx="1.5" stroke="currentColor" stroke-width="1.7"/></svg></span><span class="stat-label">Columns</span><strong id="column-count">—</strong><span class="stat-hint">Data dimensions</span></div>
+            <div class="stat-card"><span class="stat-icon missing-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4 3.8 19h16.4L12 4Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M12 9.5v4M12 16.5v.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span class="stat-label">Missing values</span><strong id="missing-count">—</strong><span class="stat-hint">Across all fields</span></div>
+          </div>
+        </article>
+
+        <article class="dashboard-card chart-card fade-in delay-two">
+          <div class="card-heading"><div><span class="section-kicker">COMPLETENESS</span><h2>Missing by column</h2></div><span class="chart-key"><i></i> Missing</span></div>
+          <div class="chart-wrap"><canvas id="missing-chart"></canvas><p class="empty-state" id="chart-empty">Upload a CSV to see your chart</p></div>
+        </article>
+
+        <article class="dashboard-card table-card fade-in delay-three" id="preview">
+          <div class="card-heading"><div><span class="section-kicker">DATA PREVIEW</span><h2>First five rows</h2></div><span class="row-count" id="preview-count">0 rows</span></div>
+          <div class="table-scroll"><table id="data-table"><thead></thead><tbody><tr><td class="table-empty">Upload a CSV to preview your data.</td></tr></tbody></table></div>
+        </article>
+
+        <article class="dashboard-card history-card fade-in delay-three" id="history">
+          <div class="card-heading"><div><span class="section-kicker">YOUR ACTIVITY</span><h2>Recent analyses</h2></div><button class="clear-button" id="clear-history" type="button">Clear all</button></div>
+          <div class="history-list" id="history-list"><div class="history-empty">Your analyzed files will appear here.</div></div>
+        </article>
+      </section>
+    </main>
+    <footer><span>DataVault</span><b>·</b> Make better decisions with better data.</footer>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
